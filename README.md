@@ -1,45 +1,72 @@
-# Brownie_SimpleStorage
-Working with Brownie first project
-A new Brownie project with brownie init
-Project Basic Explanation
-Adding SimpleStorage.sol to the contracts folder
-Compiling with brownie compile
-Brownie deploy script
-def main is brownie's entry point
-brownie defaults to a development ganache chain that it creates
-Placing functions outside of the main function
-brownie accounts
-3 Ways to Add Accounts
-accounts[0]: Brownie's "default" ganache accounts
-Only works for local ganache
-accounts.load("..."): Brownie's encrypted command line (MOST SECURE)
-Run brownie accounts new <name> and enter your private key and a password
-accounts.add(config["wallets"]["from_key"]): Storing Private Keys as an environment variable, and pulling from our brownie-config.yaml
-You'll need to add dotenv: .env to your brownie-config.yaml and have a .env file
-Importing a Contract
-Contract.Deploy
-View Function Call in Brownie
-State-Changing Function Call in Brownie / Contract Interaction
-transaction.wait(1)
-Testing Basics
-test_simple_storage.py
-Arrange, Act, Assert
-assert
+Credits: https://github.com/smartcontractkit/full-blockchain-solidity-course-py#lesson-3-fund-me
+1. Install Brownie
+
+```bash
+python3 -m pip install --user pipx
+python3 -m pipx ensurepath
+# restart your terminal
+pipx install eth-brownie
+```
+Or, if that doesn't work, via pip
+```bash
+pip install eth-brownie
+```
+
+2. Clone this
+```bash
+git clone https://github.com/PatrickAlphaC/brownie_simple_storage
+cd brownie_simple_storage
+```
+3. Add your metamask to the brownie accounts at the `0` index
+
+```bash
+brownie accounts new 0
+```
+You'll be prompted to add your private key:
+`0xa5555555555555a09215803a6b540f1e054797eeda2eec6d49076760d48e7589`
+And a password, and you can see your new added account with `brownie accounts list`
+
+Or, export your `PRIVATE_KEY` as an environment variable, and uncomment the line:
+```python
+# account = accounts.add(config["wallets"]["from_key"])
+```
+and comment the line:
+```python
+account = accounts[0]
+```
+
+4. Testing
+
+```bash
 brownie test
-test_updating_storage
-Pytest / Brownie Test Tips
-Deploy to a Testnet
-brownie networks list
-Development vs Ethereum
-Development is temporary
-Ethereum networks persist
-RPC URL / HTTP Provider in Brownie
-The network flag
-list index out of range
-get_account()
-networks.show_active()
-build/deployments
-Accessing previous deployments
-Interacting with contracts deployed in our brownie project
-[Brownie console]
-brownie console
+```
+
+5. Running scripts
+
+```bash
+brownie run scripts/deploy.py
+```
+
+6. Deploy to a testnet
+
+Add your `WEB3_INFURA_PROJECT_ID` from [Infura](https://infura.io/) to your `.env` and run 
+```bash
+source .env
+``` 
+To set your environment variable. You can check you've done it correctly with:
+```bash
+echo $WEB3_INFURA_PROJECT_ID
+```
+Change the `deploy_simple_storage` function in `deploy.py` to look like:
+```
+account = accounts.add(config["wallets"]["from_key"])
+# account = accounts.load("id")
+# account = accounts[0]
+```
+
+Then run:
+```
+brownie run scripts/deploy.py --network rinkeby
+```
+
+Make sure you have some testnet ETH. You can find faucets in the [Chainlink Documenatation](https://docs.chain.link/docs/link-token-contracts/)
